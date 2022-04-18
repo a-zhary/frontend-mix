@@ -1,5 +1,6 @@
 const mix = require('laravel-mix');
 require('mix-html-builder');
+require('laravel-mix-clean');
 
 /*
  |--------------------------------------------------------------------------
@@ -13,44 +14,45 @@ require('mix-html-builder');
  */
 
 mix
-	.setPublicPath('./public')
-	.browserSync({
-		server: {
-			baseDir: './public',
-		},
-		files: [
-			'**/*.html',
-			'resources/css/**/*.css',
-			'resources/js/**/*.js',
-			'resources/images/**/*',
-		],
-		injectChanges: true,
-		open: true,
-	})
-	.sass('resources/scss/main.scss', 'css/main.min.css')
-	.js('resources/js/app.js', 'js/app.min.js')
-	.options({
-		processCssUrls: false
-	})
-	// HTML Compiler
-	.html({
-		htmlRoot: './resources/index.html', // Your html root file(s)
-		output: '', // The html output folder
-		partialRoot: './resources/partials',    // default partial path
-		layoutRoot: './resources/layouts',    // default partial path
-		inject: true,
-		minify: {
-			removeComments: true
-		}
-	});
-	// Add Layouts
+    .setPublicPath('./public')
+    .browserSync({
+        server: {
+            baseDir: './public',
+        },
+        files: [
+            'resources/*.html',
+            'resources/css/**/*.css',
+            'resources/js/**/*.js',
+            'resources/images/**/*',
+        ],
+        injectChanges: true,
+        open: true,
+    })
+    .clean()
+    .sass('resources/scss/main.scss', 'css/main.min.css')
+    .js('resources/js/app.js', 'js/app.min.js')
+    .options({
+        processCssUrls: false
+    })
+    // HTML Compiler
+    .html({
+        htmlRoot: './resources/*.html', // Your html root file(s)
+        output: '', // The html output folder
+        partialRoot: './resources/partials',    // default partial path
+        layoutRoot: './resources/layouts',    // default partial path
+        minify: {
+            removeComments: true
+        }
+    })
+    .version();
+// Add Layouts
 
-	// Image Optimization
+// Image Optimization
 
-	// SVG Sprites
+// SVG Sprites
 
-	// Fonts generate
+// Fonts generate
 
-	// Zip
+// Zip
 
-	// Deployment
+// Deployment
