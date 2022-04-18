@@ -1,6 +1,15 @@
 const mix = require('laravel-mix');
+
+const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
+// const CopyWebpackPlugin = require('copy-webpack-plugin');
+// const ImageminPlugin = require('imagemin-webpack-plugin').default;
+// const imageminMozjpeg = require('imagemin-mozjpeg');
+
+require('laravel-mix-webp');
+
 require('mix-html-builder');
 require('laravel-mix-clean');
+// require('laravel-mix-svg-sprite');
 
 /*
  |--------------------------------------------------------------------------
@@ -44,8 +53,48 @@ mix
             removeComments: true
         }
     })
-    .version();
-// Add Layouts
+    .webpackConfig({
+        plugins: [
+            // Создаем svg-спрайт с иконками
+            new SVGSpritemapPlugin(
+                'resources/images/icons/*.svg', // Путь относительно каталога с webpack.mix.js
+                {
+                    // name: 'SVGSpritemapPlugin',
+                    output: {
+                        filename: 'images/sprite.svg', // Путь относительно каталога public/
+                        svg4everybody: false, // Отключаем плагин "SVG for Everybody"
+                        svg: {
+                            sizes: false // Удаляем инлайновые размеры svg
+                        },
+                        chunk: {
+                            keep: true, // Включаем, чтобы при сборке не было ошибок из-за отсутствия spritemap.js
+                        },
+                        svgo: {
+                            plugins: [
+                                {
+                                    name: 'removeAttrs',
+                                    params: {
+                                        attrs: '(fill|stroke|style|color)',
+                                    },
+                                },
+                            ]
+                        },
+                    },
+                    sprite: {
+                        prefix: '', // Префикс для id иконок в спрайте, будет иметь вид 'icon-имя_файла_с_иконкой'
+                        generate: {
+                            title: false, // Не добавляем в спрайт теги <title>
+                        },
+                    },
+                }
+            ),
+        ],
+    })
+
+// Add source map and versioning to assets in production environment.
+if (mix.inProduction()) {
+    mix.sourceMaps().version();
+}
 
 // Image Optimization
 

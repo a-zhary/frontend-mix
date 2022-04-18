@@ -21,6 +21,7 @@
 		"mix-html-builder": "^0.8.0",
 		"postcss": "^8.1.14",
 		"sass": "^1.47.0",
-		"sass-loader": "^12.4.0"
+		"sass-loader": "^12.4.0",
+		"svg-spritemap-webpack-plugin": "^4.4.0"
 	}
 }
